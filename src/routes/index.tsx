@@ -17,6 +17,7 @@ export const Route = createFileRoute("/")({
 });
 
 type Card = { term: string; def: string };
+type CardAction = "flip" | "prev" | "next" | "shuffle";
 
 const CARDS: Card[] = [
   {
@@ -147,7 +148,7 @@ function Index() {
           <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${((i + 1) / cards.length) * 100}%` }} />
         </div>
 
-        <button onClick={() => setFlipped((f) => !f)} aria-label="Flip card" className="perspective h-[22rem] w-full md:h-[26rem]">
+        <button onClick={() => act("flip")} data-card-action="flip" aria-label="Flip card" className="perspective h-[22rem] w-full md:h-[26rem]">
           <div className={`preserve-3d relative h-full w-full transition-transform duration-500 ${flipped ? "rotate-y-180" : ""}`}>
             <div className="backface-hidden bg-front shadow-card absolute inset-0 flex flex-col items-center justify-center rounded-3xl p-8 text-primary-foreground">
               <span className="text-xs font-bold uppercase tracking-widest opacity-80">Term</span>
@@ -161,9 +162,9 @@ function Index() {
         </button>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <button onClick={() => go(i - 1)} className={`${btn} bg-card text-foreground shadow-sm`}><ChevronLeft className="h-5 w-5" />Previous</button>
-          <button onClick={shuffle} className={`${btn} bg-secondary text-secondary-foreground`}><Shuffle className="h-5 w-5" />Shuffle</button>
-          <button onClick={() => go(i + 1)} className={`${btn} bg-primary text-primary-foreground`}>Next<ChevronRight className="h-5 w-5" /></button>
+          <button onClick={() => act("prev")} data-card-action="prev" className={`${btn} bg-card text-foreground shadow-sm`}><ChevronLeft className="h-5 w-5" />Previous</button>
+          <button onClick={() => act("shuffle")} data-card-action="shuffle" className={`${btn} bg-secondary text-secondary-foreground`}><Shuffle className="h-5 w-5" />Shuffle</button>
+          <button onClick={() => act("next")} data-card-action="next" className={`${btn} bg-primary text-primary-foreground`}>Next<ChevronRight className="h-5 w-5" /></button>
         </div>
       </main>
 

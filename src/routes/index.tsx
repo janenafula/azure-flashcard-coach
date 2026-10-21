@@ -37,7 +37,7 @@ const CARDS: Card[] = [
   },
   {
     term: "Azure Regions & Availability Zones",
-    def: "A region is a set of data centres in one geographic area, such as West Europe. Availability zones are separate locations inside a region, each with its own power, cooling and network. Spreading your workload across zones keeps it running even if one location fails.",
+    def: "A region is a set of data centres in one geographic area, such as West Europe. In supported regions, availability zones are separate locations inside that region, each with its own power, cooling and network. Spreading your workload across zones keeps it running even if one location fails.",
   },
   {
     term: "Azure Resource Groups",
@@ -61,7 +61,7 @@ const CARDS: Card[] = [
   },
   {
     term: "Shared Responsibility Model",
-    def: "Security in the cloud is a shared job. Azure always protects the physical data centres, the physical network and the host infrastructure. You look after your data, applications and access settings — and the exact split changes depending on whether you use IaaS, PaaS or SaaS.",
+    def: "Security in the cloud is a shared job. Azure always protects the physical data centres, the physical network and the host hardware. You always own your data, your accounts and who has access — how much else you manage depends on whether you use IaaS, PaaS or SaaS.",
   },
   {
     term: "Azure Well-Architected Framework",

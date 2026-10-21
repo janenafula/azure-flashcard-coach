@@ -99,12 +99,37 @@ function Index() {
   const [flipped, setFlipped] = useState(false);
   const card = cards[i] ?? CARDS[0]!;
 
-  const go = (n: number) => { setFlipped(false); setI((n + cards.length) % cards.length); };
-  const shuffle = () => {
-    const c = [...cards];
-    for (let k = c.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); const t = c[k]!; c[k] = c[j]!; c[j] = t; }
-    setCards(c); setI(0); setFlipped(false);
+  const act = (action: CardAction) => {
+    if (action === "flip") {
+      setFlipped((f) => !f);
+    } else if (action === "next") {
+      setFlipped(false);
+      setI((v) => (v + 1) % cards.length);
+    } else if (action === "prev") {
+      setFlipped(false);
+      setI((v) => (v - 1 + cards.length) % cards.length);
+    } else {
+      setCards((c) => {
+        const copy = [...c];
+        for (let k = copy.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); const t = copy[k]!; copy[k] = copy[j]!; copy[j] = t; }
+        return copy;
+      });
+      setI(0);
+      setFlipped(false);
+    }
   };
+
+  // Replay a click that landed before hydration, then hand control to React.
+  useEffect(() => {
+    const w = window as typeof window & {
+      __consumePreHydrationClick?: () => string | null;
+      __markCardAppHydrated?: () => void;
+    };
+    const buffered = w.__consumePreHydrationClick?.() as CardAction | null | undefined;
+    if (buffered === "flip" || buffered === "prev" || buffered === "next" || buffered === "shuffle") act(buffered);
+    w.__markCardAppHydrated?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const btn = "inline-flex items-center gap-2 rounded-full px-5 py-3 font-bold transition-transform hover:scale-105 active:scale-95";
 

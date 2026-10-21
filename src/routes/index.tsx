@@ -37,12 +37,12 @@ function Index() {
   const [cards, setCards] = useState(CARDS);
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const card = cards[i];
+  const card = cards[i] ?? CARDS[0]!;
 
   const go = (n: number) => { setFlipped(false); setI((n + cards.length) % cards.length); };
   const shuffle = () => {
     const c = [...cards];
-    for (let k = c.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [c[k], c[j]] = [c[j], c[k]]; }
+    for (let k = c.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); const t = c[k]!; c[k] = c[j]!; c[j] = t; }
     setCards(c); setI(0); setFlipped(false);
   };
 

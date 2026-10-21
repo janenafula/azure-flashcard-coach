@@ -6,9 +6,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Azure Flashcard Coach — AZ-900 Study Cards" },
-      { name: "description", content: "Flip through friendly AZ-900 flashcards on core cloud concepts." },
+      { name: "description", content: "Flip through friendly AZ-900 flashcards on cloud models, Azure services, pricing, identity, policy and governance." },
       { property: "og:title", content: "Azure Flashcard Coach" },
-      { property: "og:description", content: "Flip through friendly AZ-900 flashcards on core cloud concepts." },
+      { property: "og:description", content: "Flip through friendly AZ-900 flashcards on cloud models, Azure services, pricing, identity, policy and governance." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -19,18 +19,54 @@ export const Route = createFileRoute("/")({
 type Card = { term: string; def: string };
 
 const CARDS: Card[] = [
-  { term: "Cloud Computing", def: "Renting computing power, storage and apps over the internet instead of owning the hardware yourself." },
-  { term: "IaaS", def: "Infrastructure as a Service: you rent virtual machines, storage and networks, and manage the OS and apps yourself." },
-  { term: "PaaS", def: "Platform as a Service: the provider runs the servers and OS; you just bring your code and data." },
-  { term: "SaaS", def: "Software as a Service: ready-to-use apps over the internet, like email. You just log in and use it." },
-  { term: "Public Cloud", def: "Cloud services owned by a provider and shared by many customers over the internet." },
-  { term: "Private Cloud", def: "Cloud resources used by only one organization, either on-site or hosted by a provider." },
-  { term: "Hybrid Cloud", def: "A mix of public and private clouds that work together, letting data and apps move between them." },
-  { term: "Shared Responsibility Model", def: "Security duties are split: the provider secures the cloud, and you secure what you put in it." },
-  { term: "Scalability", def: "The ability to add or remove resources to handle more or less work." },
-  { term: "High Availability", def: "Keeping a service up and running with very little downtime, even when parts fail." },
-  { term: "CapEx vs OpEx", def: "CapEx is buying hardware up front; OpEx is paying as you go. Cloud moves you toward OpEx." },
-  { term: "Consumption-based Model", def: "You only pay for the cloud resources you actually use, like a utility bill." },
+  {
+    term: "Cloud Models",
+    def: "A public cloud is owned by a provider and shared by many customers over the internet. A private cloud is used by just one organisation, on-site or hosted. A hybrid cloud connects the two so data and applications can move between them.",
+  },
+  {
+    term: "IaaS",
+    def: "Infrastructure as a Service means you rent the building blocks: virtual machines, storage and networks. Azure keeps the hardware running, while you install and manage the operating system and applications yourself. It is the closest thing to owning your own servers, without buying them.",
+  },
+  {
+    term: "PaaS",
+    def: "Platform as a Service gives you a ready-made place to build and run your code. Azure handles the servers, operating system and patching, so you only bring your application and data. You spend less time on upkeep and more time on building.",
+  },
+  {
+    term: "SaaS",
+    def: "Software as a Service delivers finished applications over the internet, like email or online office tools. You simply sign in and start working — nothing to install or update. The provider looks after everything behind the scenes.",
+  },
+  {
+    term: "Azure Regions & Availability Zones",
+    def: "A region is a set of data centres in one geographic area, such as West Europe. Availability zones are separate locations inside a region, each with its own power, cooling and network. Spreading your workload across zones keeps it running even if one location fails.",
+  },
+  {
+    term: "Azure Resource Groups",
+    def: "A resource group is a container that holds related Azure resources, like a web app, its database and its network. You monitor, update and delete everything inside it as a single unit. Every resource lives in exactly one resource group.",
+  },
+  {
+    term: "Azure Pricing Calculator",
+    def: "The Azure Pricing Calculator lets you estimate what a solution will cost before you build it. Choose the services and the usage you expect, and it shows a monthly estimate. Nothing is charged — it is purely a planning tool.",
+  },
+  {
+    term: "TCO Calculator",
+    def: "The Total Cost of Ownership calculator compares running your own data centre against moving to Azure. Enter your current servers, power and staff costs, and it estimates the savings you could make. It helps build the money case for moving to the cloud.",
+  },
+  {
+    term: "Microsoft Entra ID",
+    def: "Microsoft Entra ID is Azure's identity service — it decides who can sign in and what they are allowed to access. It provides single sign-on and multi-factor authentication for your users and applications. It was formerly known as Azure Active Directory.",
+  },
+  {
+    term: "Azure Policy",
+    def: "Azure Policy lets you set rules that your resources must follow, such as requiring tags or blocking certain regions. It checks new and existing resources and reports anything that breaks the rules. This keeps your environment consistent and compliant.",
+  },
+  {
+    term: "Shared Responsibility Model",
+    def: "Security in the cloud is a shared job. Azure always protects the physical data centres, the physical network and the host infrastructure. You look after your data, applications and access settings — and the exact split changes depending on whether you use IaaS, PaaS or SaaS.",
+  },
+  {
+    term: "Azure Well-Architected Framework",
+    def: "The Well-Architected Framework is guidance for building dependable workloads on Azure. It is built on five pillars: cost optimisation, operational excellence, performance efficiency, reliability and security. Use it to review a design and spot weak spots before they become problems.",
+  },
 ];
 
 function Index() {
@@ -51,7 +87,7 @@ function Index() {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="px-6 pt-10 text-center">
-        <span className="inline-block rounded-full bg-accent px-4 py-1 text-sm font-bold text-accent-foreground">AZ-900 · Cloud Concepts</span>
+        <span className="inline-block rounded-full bg-accent px-4 py-1 text-sm font-bold text-accent-foreground">AZ-900 · Core Study Topics</span>
         <h1 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-semibold text-foreground md:text-5xl">Azure Flashcard Coach</h1>
         <p className="mt-2 text-muted-foreground">Tap the card to flip it.</p>
       </header>
@@ -62,15 +98,15 @@ function Index() {
           <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${((i + 1) / cards.length) * 100}%` }} />
         </div>
 
-        <button onClick={() => setFlipped((f) => !f)} aria-label="Flip card" className="perspective h-80 w-full">
+        <button onClick={() => setFlipped((f) => !f)} aria-label="Flip card" className="perspective h-[22rem] w-full md:h-[26rem]">
           <div className={`preserve-3d relative h-full w-full transition-transform duration-500 ${flipped ? "rotate-y-180" : ""}`}>
             <div className="backface-hidden bg-front shadow-card absolute inset-0 flex flex-col items-center justify-center rounded-3xl p-8 text-primary-foreground">
               <span className="text-xs font-bold uppercase tracking-widest opacity-80">Term</span>
-              <h2 className="mt-3 text-center font-[family-name:var(--font-display)] text-4xl font-semibold">{card.term}</h2>
+              <h2 className="mt-3 text-center font-[family-name:var(--font-display)] text-3xl font-semibold md:text-4xl">{card.term}</h2>
             </div>
             <div className="backface-hidden rotate-y-180 bg-back shadow-card absolute inset-0 flex flex-col items-center justify-center rounded-3xl p-8 text-accent-foreground">
               <span className="text-xs font-bold uppercase tracking-widest opacity-80">{card.term}</span>
-              <p className="mt-3 text-center text-xl font-semibold leading-relaxed">{card.def}</p>
+              <p className="mt-3 text-center text-lg font-semibold leading-relaxed md:text-xl">{card.def}</p>
             </div>
           </div>
         </button>

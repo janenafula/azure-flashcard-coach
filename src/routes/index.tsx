@@ -48,24 +48,48 @@ const CARDS: Card[] = [
     def: "The Azure Pricing Calculator lets you estimate what a solution will cost before you build it. Choose the services and the usage you expect, and it shows a monthly estimate. Nothing is charged — it is purely a planning tool.",
   },
   {
+    term: "Pricing Calculator — What Affects Price",
+    def: "Your Azure bill moves with the region you pick, the service tier you choose and how much you use. The pricing calculator lets you change those choices and watch the monthly estimate adjust. You can save an estimate and share it with your team for review.",
+  },
+  {
     term: "TCO Calculator",
     def: "The Total Cost of Ownership calculator compares running your own data centre against moving to Azure. Enter your current servers, power and staff costs, and it estimates the savings you could make. It helps build the money case for moving to the cloud.",
+  },
+  {
+    term: "TCO Calculator — What It Compares",
+    def: "The total cost of ownership calculator looks at hardware, power, cooling and staff time in your own data centre, then compares that with running the same workload on Azure. It also factors in savings such as newer hardware and reserved pricing. The output is an estimate to support your business case, not a binding quote.",
   },
   {
     term: "Microsoft Entra ID",
     def: "Microsoft Entra ID is Azure's identity service — it decides who can sign in and what they are allowed to access. It provides single sign-on and multi-factor authentication for your users and applications. It was formerly known as Azure Active Directory.",
   },
   {
+    term: "Microsoft Entra ID — Sign-In Security",
+    def: "Conditional Access is a Microsoft Entra ID rule that checks the conditions of a sign-in before access is granted. It can require multi-factor authentication, block unfamiliar locations or insist on a managed device. The security check happens at the moment someone tries to sign in.",
+  },
+  {
     term: "Azure Policy",
     def: "Azure Policy lets you set rules that your resources must follow, such as requiring tags or blocking certain regions. It checks new and existing resources and reports anything that breaks the rules. This keeps your environment consistent and compliant.",
+  },
+  {
+    term: "Azure Policy — Initiatives",
+    def: "An initiative is a bundle of related Azure Policy rules grouped together, such as all the rules needed for an industry standard. Assigning one initiative applies many policies at once instead of one at a time. Azure Policy then reports which resources comply and which need fixing.",
   },
   {
     term: "Shared Responsibility Model",
     def: "Security in the cloud is a shared job. Azure always protects the physical data centres, the physical network and the host hardware. You always own your data, your accounts and who has access — how much else you manage depends on whether you use IaaS, PaaS or SaaS.",
   },
   {
+    term: "Shared Responsibility — Your Data",
+    def: "Whatever cloud service you use, your data is always your responsibility. That means controlling who can see it, keeping backups and encrypting it where required. Azure keeps the platform healthy, but it does not know which of your files matter most.",
+  },
+  {
     term: "Azure Well-Architected Framework",
     def: "The Well-Architected Framework is guidance for building dependable workloads on Azure. It is built on five pillars: cost optimisation, operational excellence, performance efficiency, reliability and security. Use it to review a design and spot weak spots before they become problems.",
+  },
+  {
+    term: "Well-Architected — Reliability Pillar",
+    def: "The reliability pillar is about a workload recovering from failures and continuing to run. It asks you to build in redundancy, recover automatically and test your assumptions. The aim is a system that keeps working even when parts of it break.",
   },
 ];
 

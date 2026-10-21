@@ -96,10 +96,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+// Runs before React hydrates: clicks on card controls that land in the
+// SSR-to-hydration gap are buffered and stopped, then replayed on mount,
+// so the very first click on a fresh load is never ignored.
+const earlyClickScript = `(function(){
+  var hydrated = false, buffered = null;
+  document.addEventListener('click', function(e){
+    if (hydrated) return;
+    var t = e.target;
+    var el = t && t.closest ? t.closest('[data-card-action]') : null;
+    if (!el) return;
+    buffered = el.getAttribute('data-card-action');
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+  window.__consumePreHydrationClick = function(){ var v = buffered; buffered = null; return v; };
+  window.__markCardAppHydrated = function(){ hydrated = true; buffered = null; };
+})();`;
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: earlyClickScript }} />
         <HeadContent />
       </head>
       <body>

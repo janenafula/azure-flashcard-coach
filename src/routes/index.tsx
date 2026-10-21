@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/")({
 });
 
 type Card = { term: string; def: string };
+type CardAction = "flip" | "prev" | "next" | "shuffle";
 
 const CARDS: Card[] = [
   {
@@ -99,12 +100,37 @@ function Index() {
   const [flipped, setFlipped] = useState(false);
   const card = cards[i] ?? CARDS[0]!;
 
-  const go = (n: number) => { setFlipped(false); setI((n + cards.length) % cards.length); };
-  const shuffle = () => {
-    const c = [...cards];
-    for (let k = c.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); const t = c[k]!; c[k] = c[j]!; c[j] = t; }
-    setCards(c); setI(0); setFlipped(false);
+  const act = (action: CardAction) => {
+    if (action === "flip") {
+      setFlipped((f) => !f);
+    } else if (action === "next") {
+      setFlipped(false);
+      setI((v) => (v + 1) % cards.length);
+    } else if (action === "prev") {
+      setFlipped(false);
+      setI((v) => (v - 1 + cards.length) % cards.length);
+    } else {
+      setCards((c) => {
+        const copy = [...c];
+        for (let k = copy.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); const t = copy[k]!; copy[k] = copy[j]!; copy[j] = t; }
+        return copy;
+      });
+      setI(0);
+      setFlipped(false);
+    }
   };
+
+  // Replay a click that landed before hydration, then hand control to React.
+  useEffect(() => {
+    const w = window as typeof window & {
+      __consumePreHydrationClick?: () => string | null;
+      __markCardAppHydrated?: () => void;
+    };
+    const buffered = w.__consumePreHydrationClick?.() as CardAction | null | undefined;
+    if (buffered === "flip" || buffered === "prev" || buffered === "next" || buffered === "shuffle") act(buffered);
+    w.__markCardAppHydrated?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const btn = "inline-flex items-center gap-2 rounded-full px-5 py-3 font-bold transition-transform hover:scale-105 active:scale-95";
 
@@ -122,7 +148,7 @@ function Index() {
           <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${((i + 1) / cards.length) * 100}%` }} />
         </div>
 
-        <button onClick={() => setFlipped((f) => !f)} aria-label="Flip card" className="perspective h-[22rem] w-full md:h-[26rem]">
+        <button onClick={() => act("flip")} data-card-action="flip" aria-label="Flip card" className="perspective h-[22rem] w-full md:h-[26rem]">
           <div className={`preserve-3d relative h-full w-full transition-transform duration-500 ${flipped ? "rotate-y-180" : ""}`}>
             <div className="backface-hidden bg-front shadow-card absolute inset-0 flex flex-col items-center justify-center rounded-3xl p-8 text-primary-foreground">
               <span className="text-xs font-bold uppercase tracking-widest opacity-80">Term</span>
@@ -136,9 +162,9 @@ function Index() {
         </button>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <button onClick={() => go(i - 1)} className={`${btn} bg-card text-foreground shadow-sm`}><ChevronLeft className="h-5 w-5" />Previous</button>
-          <button onClick={shuffle} className={`${btn} bg-secondary text-secondary-foreground`}><Shuffle className="h-5 w-5" />Shuffle</button>
-          <button onClick={() => go(i + 1)} className={`${btn} bg-primary text-primary-foreground`}>Next<ChevronRight className="h-5 w-5" /></button>
+          <button onClick={() => act("prev")} data-card-action="prev" className={`${btn} bg-card text-foreground shadow-sm`}><ChevronLeft className="h-5 w-5" />Previous</button>
+          <button onClick={() => act("shuffle")} data-card-action="shuffle" className={`${btn} bg-secondary text-secondary-foreground`}><Shuffle className="h-5 w-5" />Shuffle</button>
+          <button onClick={() => act("next")} data-card-action="next" className={`${btn} bg-primary text-primary-foreground`}>Next<ChevronRight className="h-5 w-5" /></button>
         </div>
       </main>
 
